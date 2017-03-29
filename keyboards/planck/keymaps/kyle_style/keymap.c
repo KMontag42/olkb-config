@@ -13,7 +13,7 @@
 #define EMACS_RESTART 42
 
 // Set our timeout for the Lead Key
-#define LEADER_TIMEOUT 300
+#define LEADER_TIMEOUT 400
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -95,10 +95,6 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
       layer_off(2);
     }
     break;
-  case EMACS_RESTART: // emacs restart
-    if (record->event.pressed) {
-      return MACRO(T(SPC), T(Q), T(R), END);
-    }
   }
   return MACRO_NONE;
 };
@@ -106,6 +102,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 // LEADER KEY DEFINITIONS:
 /*
  * LEAD -> E -> Q : Restart Emacs (SPC q r)
+ * LEAD -> E -> S : Save file in Emacs (:w)
  */
 
 LEADER_EXTERNS();
@@ -121,8 +118,13 @@ void matrix_scan_user(void) {
     }
 
     SEQ_TWO_KEYS(KC_E, KC_Q) {
-      register_code(M(EMACS_RESTART));
-      unregister_code(M(EMACS_RESTART));
+      SEND_STRING(" qr");
+    }
+
+    SEQ_TWO_KEYS(KC_E, KC_S) {
+      SEND_STRING(":w");
+      register_code(KC_ENT);
+      unregister_code(KC_ENT);
     }
   }
 }
