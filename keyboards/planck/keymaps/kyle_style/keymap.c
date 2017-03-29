@@ -9,11 +9,8 @@
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 
-// Define our custom Macro names
-#define EMACS_RESTART 42
-
 // Set our timeout for the Lead Key
-#define LEADER_TIMEOUT 400
+#define LEADER_TIMEOUT 420
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -120,11 +117,9 @@ void matrix_scan_user(void) {
     SEQ_TWO_KEYS(KC_E, KC_Q) {
       SEND_STRING(" qr");
     }
-
+    
     SEQ_TWO_KEYS(KC_E, KC_S) {
-      SEND_STRING(":w");
-      register_code(KC_ENT);
-      unregister_code(KC_ENT);
+      SEND_STRING(":w\n");
     }
   }
 }
