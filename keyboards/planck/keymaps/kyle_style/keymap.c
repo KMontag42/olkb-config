@@ -117,9 +117,16 @@ void matrix_scan_user(void) {
     SEQ_TWO_KEYS(KC_E, KC_Q) {
       SEND_STRING(" qr");
     }
-    
+
     SEQ_TWO_KEYS(KC_E, KC_S) {
       SEND_STRING(":w\n");
+    }
+
+    SEQ_THREE_KEYS(KC_E, KC_G, KC_S) {
+      SEND_STRING(" gs");
+      register_code(KC_DOWN);
+      unregister_code(KC_DOWN);
+      SEND_STRING("sc");
     }
   }
 }
