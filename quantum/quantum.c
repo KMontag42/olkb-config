@@ -437,6 +437,32 @@ bool process_record_quantum(keyrecord_t *record) {
       return false;
       // break;
     }
+  case KC_LGUIPC: {
+    if (record->event.pressed) {
+      shift_interrupted[1] = false;
+      scs_timer = timer_read ();
+      register_mods(MOD_BIT(KC_LGUI));
+    }
+    else {
+      #ifdef DISABLE_SPACE_CADET_ROLLOVER
+        if (get_mods() & MOD_BIT(KC_LSFT)) {
+          shift_interrupted[0] = true;
+          shift_interrupted[1] = true;
+        }
+      #endif
+      if (!shift_interrupted[1] && timer_elapsed(scs_timer) < TAPPING_TERM) {
+        unregister_mods(MOD_BIT(KC_LGUI));
+
+        register_mods(MOD_BIT(KC_LSFT));
+        register_code(RSPC_KEY);
+        unregister_code(RSPC_KEY);
+        unregister_mods(MOD_BIT(KC_LSFT));
+      } else {
+        unregister_mods(MOD_BIT(KC_LGUI));
+      }
+    }
+    return false;
+  }
     default: {
       shift_interrupted[0] = true;
       shift_interrupted[1] = true;
